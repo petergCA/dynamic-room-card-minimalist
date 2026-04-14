@@ -61,7 +61,7 @@
 			{
 				"assets": [
 					{
-						"path": "dist/room-card-minimalist.js",
+						"path": "dist/dynamic-room-card-minimalist.js",
 						"label": "Room Card Minimalist"
 					}
 				]

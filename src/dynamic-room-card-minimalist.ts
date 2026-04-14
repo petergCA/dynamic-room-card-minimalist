@@ -86,11 +86,17 @@ export class RoomCard extends LitElement {
 	static override styles = cardStyles;
 
 	/**
-	 * Card size for Home Assistant masonry layout
-	 * Returns 4 (4 * 50px = 200px)
+	 * Card size for Home Assistant masonry layout — scales with entity count
 	 */
 	getCardSize(): number {
-		return 4;
+		if (!this._config) return 4;
+		const entityCount = this._config.entities.length;
+		if (entityCount === 0) return 4;
+		const columns = this._config.entity_columns ?? 1;
+		const rows = Math.ceil(entityCount / columns);
+		// Each entity row is ~57px (45px item + 12px gap); base card is 4 units (200px)
+		const entityHeight = 20 + rows * 45 + Math.max(0, rows - 1) * 12;
+		return Math.max(4, Math.ceil(entityHeight / 50) + 1);
 	}
 
 	/**
@@ -118,7 +124,7 @@ export class RoomCard extends LitElement {
 	 * Register the visual config editor component
 	 */
 	static getConfigElement(): HTMLElement {
-		return document.createElement('room-card-minimalist-editor');
+		return document.createElement('dynamic-room-card-minimalist-editor');
 	}
 
 	/**
@@ -128,7 +134,7 @@ export class RoomCard extends LitElement {
 		const randomTemplate = getRandomColorTemplate() as ColorTemplateName;
 
 		return {
-			type: 'custom:room-card-minimalist',
+			type: 'custom:dynamic-room-card-minimalist',
 			name: 'Living Room',
 			icon: 'mdi:sofa',
 			card_template: randomTemplate,
@@ -287,6 +293,7 @@ export class RoomCard extends LitElement {
 		const tertiary = this._getValueRawOrTemplate(this._config.tertiary);
 		const tertiaryColor = this._getValueRawOrTemplate(this._config.tertiary_color);
 		let entitiesToShow = this._config.entities.slice(0, MAX_ENTITIES);
+		const entityColumns = this._config.entity_columns ?? 1;
 
 		if (this._config.entities_reverse_order) {
 			entitiesToShow = [...entitiesToShow].reverse();
@@ -372,6 +379,7 @@ export class RoomCard extends LitElement {
 							class="states ${this._config.entities_reverse_order
 								? 'states-reverse'
 								: ''}"
+							style="--entity-columns: ${entityColumns}"
 						>
 							${entitiesToShow.map((item) => this._renderItem(item))}
 						</div>
@@ -661,7 +669,7 @@ export class RoomCard extends LitElement {
 }
 
 // Register the custom element
-customElements.define('room-card-minimalist', RoomCard);
+customElements.define('dynamic-room-card-minimalist', RoomCard);
 
 // Log version info
 console.log(
@@ -673,6 +681,6 @@ console.log(
 // Declare global for Home Assistant custom card registration
 declare global {
 	interface HTMLElementTagNameMap {
-		'room-card-minimalist': RoomCard;
+		'dynamic-room-card-minimalist': RoomCard;
 	}
 }

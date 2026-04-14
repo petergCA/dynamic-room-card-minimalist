@@ -252,6 +252,9 @@ export function renderEntityItem(
 	const isClickable = isEntityItemClickable(item);
 	const iconClass = !isOn ? 'off' : 'on';
 	const hasValue = displayValue !== undefined && displayValue !== '';
+	const entityName = item.name;
+	const hasName = Boolean(entityName);
+	const nameColor = isOn ? 'var(--primary-text-color)' : 'var(--secondary-text-color)';
 
 	return html`
 		<div
@@ -264,18 +267,23 @@ export function renderEntityItem(
 			@touchend=${isClickable ? handlers?.onTouchEnd : null}
 			@contextmenu=${isClickable ? handlers?.onContextMenu : null}
 			tabindex="${isClickable ? '0' : '-1'}"
-			class="state-item ${isClickable ? 'clickable' : 'non-clickable'} ${hasValue
-				? 'has-value'
-				: ''}"
-			style="background-color: ${backgroundColor}"
+			class="state-item ${isClickable ? 'clickable' : 'non-clickable'}"
 		>
-			<ha-icon
-				class="state-icon ${iconClass}"
-				.icon=${icon}
-				style="color: ${iconColor}"
-			></ha-icon>
-			${hasValue
-				? html`<span class="state-value" style="color: ${iconColor}">${displayValue}</span>`
+			<div
+				class="state-icon-circle ${hasValue ? 'has-value' : ''}"
+				style="background-color: ${backgroundColor}"
+			>
+				<ha-icon
+					class="state-icon ${iconClass}"
+					.icon=${icon}
+					style="color: ${iconColor}"
+				></ha-icon>
+				${hasValue
+					? html`<span class="state-value" style="color: ${iconColor}">${displayValue}</span>`
+					: nothing}
+			</div>
+			${hasName
+				? html`<span class="state-name" style="color: ${nameColor}">${entityName}</span>`
 				: nothing}
 		</div>
 	`;

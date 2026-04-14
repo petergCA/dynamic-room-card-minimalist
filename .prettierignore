@@ -24,7 +24,7 @@ Thumbs.db
 .husky/_/
 
 # Generated files
-dist/room-card-minimalist.js
+dist/dynamic-room-card-minimalist.js
 CHANGELOG.md
 # Docker & Config directories
 docker/

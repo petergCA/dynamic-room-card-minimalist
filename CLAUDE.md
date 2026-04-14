@@ -10,7 +10,7 @@ Room Card Minimalist is a custom Home Assistant Lovelace card built with Lit (We
 
 ```bash
 npm install              # Install dependencies
-npm run build            # Production build → dist/room-card-minimalist.js
+npm run build            # Production build → dist/dynamic-room-card-minimalist.js
 npm run build:dev        # Development build (unminified, with console logs)
 npm run watch            # Dev server at localhost:8080 with live reload
 npm run typecheck        # TypeScript type checking
@@ -23,7 +23,7 @@ npm run format:check     # Check formatting without changes
 1. Start webpack dev server: `npm run watch`
 2. Start local Home Assistant: `npm run docker:start`
 3. Access HA at localhost:8123
-4. Add resource URL: `http://localhost:8080/room-card-minimalist.js` (type: JavaScript Module)
+4. Add resource URL: `http://localhost:8080/dynamic-room-card-minimalist.js` (type: JavaScript Module)
 5. Stop HA when done: `npm run docker:stop`
 
 ## Architecture
@@ -33,8 +33,8 @@ npm run format:check     # Check formatting without changes
 ```
 src/
 ├── index.ts                      # Entry point
-├── room-card-minimalist.ts       # Main card component
-├── room-card-minimalist-editor.ts # Visual editor component
+├── dynamic-room-card-minimalist.ts       # Main card component
+├── dynamic-room-card-minimalist-editor.ts # Visual editor component
 ├── types/                        # TypeScript interfaces
 ├── services/                     # Business logic services
 ├── utils/                        # Helper functions
@@ -46,13 +46,13 @@ src/
 
 ### Key Components
 
-**Main Card** (`room-card-minimalist.ts`):
+**Main Card** (`dynamic-room-card-minimalist.ts`):
 
 - Renders room card UI with icon, name, secondary/tertiary info, entity states
 - Uses `TemplateService` for Jinja2 template subscriptions
 - Uses `ActionController` for tap/hold event handling
 
-**Editor** (`room-card-minimalist-editor.ts`):
+**Editor** (`dynamic-room-card-minimalist-editor.ts`):
 
 - Renders configuration UI using Home Assistant's `ha-form`
 - Handles drag-and-drop entity reordering

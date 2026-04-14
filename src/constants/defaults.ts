@@ -37,9 +37,10 @@ export const DOUBLE_TAP_TIMEOUT_MS = 300;
  */
 export const DEFAULT_DOUBLE_TAP_ACTION = { action: 'none' as const };
 
-/** * Maximum number of entities that can be displayed
+/**
+ * Maximum number of entities that can be displayed
  */
-export const MAX_ENTITIES = 4;
+export const MAX_ENTITIES = 8;
 
 /**
  * Domains that support toggle action by default

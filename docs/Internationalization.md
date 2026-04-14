@@ -79,8 +79,8 @@ To add a new language, simply copy the English template and translate it:
 
 ```bash
 # 1. Fork on GitHub, then clone your fork
-git clone https://github.com/yourusername/room-card-minimalist.git
-cd room-card-minimalist
+git clone https://github.com/yourusername/dynamic-room-card-minimalist.git
+cd dynamic-room-card-minimalist
 
 # 2. Create translation branch
 git checkout -b translation-fr

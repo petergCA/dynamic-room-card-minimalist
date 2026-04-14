@@ -7,7 +7,7 @@ services:
     volumes:
       - ./config:/config
       - ./custom_components:/config/custom_components
-      - ../dist:/config/www/room-card-minimalist
+      - ../dist:/config/www/dynamic-room-card-minimalist
     environment:
       - TZ=Europe/Berlin
     restart: unless-stopped

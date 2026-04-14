@@ -22,7 +22,7 @@ export interface LegacyConfigProperties {
 
 // Main card configuration interface
 export interface RoomCardConfig extends ActionsConfig {
-	type: 'custom:room-card-minimalist';
+	type: 'custom:dynamic-room-card-minimalist';
 	// Required fields
 	name: string;
 	icon: string;
@@ -51,9 +51,10 @@ export interface RoomCardConfig extends ActionsConfig {
 	background_image?: string;
 	background_person_entity?: string;
 	background_image_square?: boolean;
-	// Entity states (max 4)
+	// Entity states
 	entities?: EntityConfig[];
 	entities_reverse_order?: boolean;
+	entity_columns?: 1 | 2;
 	// Color options
 	use_template_color_for_title?: boolean;
 	use_template_color_for_secondary?: boolean;
@@ -81,6 +82,7 @@ export interface RoomCardInternalConfig extends RoomCardConfig {
 	background_person_entity: string;
 	background_image_square: boolean;
 	entities_reverse_order: boolean;
+	entity_columns: 1 | 2;
 	use_template_color_for_title: boolean;
 	use_template_color_for_secondary: boolean;
 	use_template_color_for_tertiary: boolean;
@@ -102,6 +104,7 @@ export const DEFAULT_CARD_CONFIG: Omit<RoomCardInternalConfig, 'type' | 'name' |
 	background_person_entity: '',
 	background_image_square: false,
 	entities_reverse_order: false,
+	entity_columns: 1,
 	use_template_color_for_title: false,
 	use_template_color_for_secondary: false,
 	use_template_color_for_tertiary: false,

@@ -8,10 +8,10 @@
 ![build][build-badge]
 [![license][license-badge]][license-url]
 
-![Card - Dark Theme](https://github.com/unbekannt3/hass-room-card-minimalist/blob/main/docs/images/cards-dark.png?raw=true)
-![Card - Light Theme](https://github.com/unbekannt3/hass-room-card-minimalist/blob/main/docs/images/cards-light.png?raw=true)
+![Card - Dark Theme](https://github.com/unbekannt3/hass-dynamic-room-card-minimalist/blob/main/docs/images/cards-dark.png?raw=true)
+![Card - Light Theme](https://github.com/unbekannt3/hass-dynamic-room-card-minimalist/blob/main/docs/images/cards-light.png?raw=true)
 
-A minimalist room card for Home Assistant inspired by [UI Lovelace Minimalist](https://ui-lovelace-minimalist.github.io/UI/usage/cards/card_room/). Features a room name, styled icon, optional secondary/tertiary info lines, and up to 4 entity state indicators.
+A minimalist room card for Home Assistant inspired by [UI Lovelace Minimalist](https://ui-lovelace-minimalist.github.io/UI/usage/cards/card_room/). Features a room name, styled icon, optional secondary/tertiary info lines, and up to 8 entity state indicators with optional names, a two-column layout, and a card height that grows automatically with content.
 
 Based on [patrickfnielsen/hass-room-card](https://github.com/patrickfnielsen/hass-room-card).
 
@@ -26,6 +26,7 @@ Based on [patrickfnielsen/hass-room-card](https://github.com/patrickfnielsen/has
   - [Secondary & Tertiary Info](#secondary--tertiary-info)
   - [Icon & Background](#icon--background)
   - [Entity States](#entity-states)
+  - [Entity Layout](#entity-layout)
   - [Multi-State Entities](#multi-state-entities)
   - [Climate Entities](#climate-entities)
   - [Color Templates](#color-templates)
@@ -40,24 +41,24 @@ Based on [patrickfnielsen/hass-room-card](https://github.com/patrickfnielsen/has
 
 ### HACS (Recommended)
 
-[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=unbekannt3&repository=room-card-minimalist)
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=unbekannt3&repository=dynamic-room-card-minimalist)
 
-Or search for "room-card-minimalist" in [HACS][hacs].
+Or search for "dynamic-room-card-minimalist" in [HACS][hacs].
 
 ### Manual
 
-1. Download `room-card-minimalist.js` from the [latest release][release-url]
+1. Download `dynamic-room-card-minimalist.js` from the [latest release][release-url]
 2. Place it in your `config/www` folder
 3. Add the resource:
    - **UI:** _Settings_ → _Dashboards_ → _Resources_ → _Add Resource_
-     - URL: `/local/room-card-minimalist.js`
+     - URL: `/local/dynamic-room-card-minimalist.js`
      - Type: `JavaScript Module`
    - **YAML:**
 
      ```yaml
      lovelace:
        resources:
-         - url: /local/room-card-minimalist.js
+         - url: /local/dynamic-room-card-minimalist.js
            type: module
      ```
 
@@ -66,7 +67,7 @@ Or search for "room-card-minimalist" in [HACS][hacs].
 ## Quick Start
 
 ```yaml
-type: custom:room-card-minimalist
+type: custom:dynamic-room-card-minimalist
 name: Living Room
 icon: mdi:sofa
 card_template: blue
@@ -92,7 +93,8 @@ The visual editor is fully supported. Below is the YAML reference.
 | `double_tap_action`            | object  | `none`     | Action on double-tap                                                               |
 | `use_template_color_for_title` | boolean | `false`    | Use preset color for room name                                                     |
 | `entities_reverse_order`       | boolean | `false`    | Align entity indicators to bottom                                                  |
-| `entities`                     | list    | —          | Entity state indicators (max 4). See [Entity States](#entity-states)               |
+| `entity_columns`               | number  | `1`        | Number of entity columns (`1` or `2`). See [Entity Layout](#entity-layout)         |
+| `entities`                     | list    | —          | Entity state indicators (max 8). See [Entity States](#entity-states)               |
 
 ### Secondary & Tertiary Info
 
@@ -180,13 +182,14 @@ background_image: "/local/images/room.jpg"
 
 ### Entity States
 
-Up to 4 entity indicators on the right side of the card. Each can be an `entity` or `template` type.
+Up to 8 entity indicators on the right side of the card. Each can be an `entity` or `template` type. The card height grows automatically to fit all indicators.
 
 | Name                   | Type    | Default    | Description                                            |
 | :--------------------- | :------ | :--------- | :----------------------------------------------------- |
 | `type`                 | enum    | _Required_ | `entity` or `template`                                 |
 | `icon`                 | string  | _Required_ | Icon when on/active                                    |
 | `icon_off`             | string  | —          | Icon when off (defaults to `icon`)                     |
+| `name`                 | string  | —          | Label shown next to the icon. See [Entity Layout](#entity-layout) |
 | `entity`               | string  | —          | Entity ID (required for `type: entity`)                |
 | `on_state`             | string  | —          | State value considered "on" (required for non-climate) |
 | `condition`            | string  | —          | Template condition (required for `type: template`)     |
@@ -244,6 +247,68 @@ entities:
       {% if count > 0 %}{{ count }}{% endif %}
     template_on: yellow
 ```
+
+### Entity Layout
+
+#### Entity Names
+
+Add a `name` field to any entity to display a label to the right of its icon. The label color follows the on/off state — primary text color when active, secondary when inactive.
+
+```yaml
+entities:
+  - type: entity
+    entity: light.ceiling
+    icon: mdi:ceiling-light
+    icon_off: mdi:ceiling-light-outline
+    on_state: 'on'
+    name: Lights
+    use_light_color: true
+```
+
+#### Two-Column Layout
+
+Set `entity_columns: 2` on the card to arrange indicators in two side-by-side columns. This is most useful when combining it with entity names.
+
+```yaml
+type: custom:dynamic-room-card-minimalist
+name: Living Room
+icon: mdi:sofa
+entity_columns: 2
+entities:
+  - type: entity
+    entity: light.ceiling
+    icon: mdi:ceiling-light
+    icon_off: mdi:ceiling-light-outline
+    on_state: 'on'
+    name: Lights
+    template_on: yellow
+  - type: entity
+    entity: climate.living_room
+    icon: mdi:thermostat
+    name: Heat
+    use_multi_state: true
+    custom_states: 'off, heat, cool'
+    template_heat: red
+    template_cool: lightblue
+  - type: template
+    icon: mdi:motion-sensor
+    icon_off: mdi:motion-sensor-off
+    condition: "{{ is_state('binary_sensor.motion', 'on') }}"
+    name: Motion
+    template_on: green
+  - type: entity
+    entity: lock.front_door
+    icon: mdi:lock
+    icon_off: mdi:lock-open
+    on_state: locked
+    name: Lock
+    template_on: green
+    template_off: red
+```
+
+#### Dynamic Card Height
+
+The card no longer has a fixed height. It starts at a minimum of 236 px and grows vertically to fit all configured entity rows. No extra configuration is required — just add more entities and the card expands automatically.
 
 ### Multi-State Entities
 
@@ -352,7 +417,7 @@ Templates use CSS variables (`--color-*`) which can be customized by themes like
 ### Full Configuration
 
 ```yaml
-type: custom:room-card-minimalist
+type: custom:dynamic-room-card-minimalist
 name: Living Room
 icon: mdi:sofa
 card_template: blue
@@ -373,13 +438,15 @@ tap_action:
   action: navigate
   navigation_path: /lovelace/living-room
 
-# Entity indicators
+# Two-column entity layout with names — card height grows automatically
+entity_columns: 2
 entities:
   - type: entity
     entity: light.ceiling
     icon: mdi:ceiling-light
     icon_off: mdi:ceiling-light-outline
     on_state: 'on'
+    name: Lights
     use_light_color: true
     tap_action:
       action: toggle
@@ -389,16 +456,59 @@ entities:
     icon: mdi:motion-sensor
     icon_off: mdi:motion-sensor-off
     on_state: 'on'
+    name: Motion
     template_on: green
 
   - type: entity
     entity: climate.thermostat
     icon: mdi:thermostat
+    name: Heat
     use_multi_state: true
     custom_states: 'off, heat, cool'
     template_off: grey
     template_heat: red
     template_cool: lightblue
+
+  - type: entity
+    entity: lock.front_door
+    icon: mdi:lock
+    icon_off: mdi:lock-open
+    on_state: locked
+    name: Lock
+    template_on: green
+    template_off: red
+```
+
+### Single-Column with Names
+
+```yaml
+type: custom:dynamic-room-card-minimalist
+name: Bedroom
+icon: mdi:bed
+card_template: indigo
+entities:
+  - type: entity
+    entity: light.bedroom
+    icon: mdi:ceiling-light
+    icon_off: mdi:ceiling-light-outline
+    on_state: 'on'
+    name: Lights
+    template_on: yellow
+  - type: entity
+    entity: binary_sensor.window
+    icon: mdi:window-open
+    icon_off: mdi:window-closed
+    on_state: 'on'
+    name: Window
+    template_on: lightblue
+  - type: entity
+    entity: sensor.bedroom_temperature
+    icon: mdi:thermometer
+    on_state: 'on'
+    name: Temp
+    show_value: true
+    value_template: "{{ states('sensor.bedroom_temperature') }}°"
+    template_on: orange
 ```
 
 ### HTML in Secondary/Tertiary
@@ -422,16 +532,18 @@ secondary: >
 
 ### Layout Tips
 
-Due to the fixed card size, use stacks for better alignment:
+Cards in a horizontal stack share the same row height. When cards have different entity counts the shorter ones will stretch to match the tallest, which keeps the row visually consistent.
 
 ```yaml
 type: horizontal-stack
 cards:
-  - type: custom:room-card-minimalist
+  - type: custom:dynamic-room-card-minimalist
     # ...
-  - type: custom:room-card-minimalist
+  - type: custom:dynamic-room-card-minimalist
     # ...
 ```
+
+Use `entity_columns: 2` to fit more indicators into the same vertical space without making the card taller.
 
 ### Theme Compatibility
 
@@ -464,7 +576,7 @@ npm run docker:stop   # Stop local HA
 npm run build         # Production build
 ```
 
-Add the dev resource in HA: `http://localhost:8080/room-card-minimalist.js` (JavaScript Module)
+Add the dev resource in HA: `http://localhost:8080/dynamic-room-card-minimalist.js` (JavaScript Module)
 
 ---
 
@@ -473,15 +585,15 @@ Add the dev resource in HA: `http://localhost:8080/room-card-minimalist.js` (Jav
 [homeassistant]: https://img.shields.io/badge/home%20assistant-%2341BDF5.svg?style=flat-square&logo=home-assistant&logoColor=white
 [hacs-url]: https://github.com/hacs/integration
 [hacs-badge]: https://img.shields.io/badge/hacs-default-orange.svg?style=flat-square
-[release-badge]: https://img.shields.io/github/v/release/unbekannt3/room-card-minimalist?style=flat-square
-[prerelease-badge]: https://img.shields.io/github/v/release/unbekannt3/room-card-minimalist?include_prereleases&style=flat-square&label=prerelease
-[downloads-badge]: https://img.shields.io/github/downloads/unbekannt3/room-card-minimalist/total?style=flat-square
-[build-badge]: https://img.shields.io/github/actions/workflow/status/unbekannt3/room-card-minimalist/build.yaml?branch=main&style=flat-square
-[license-badge]: https://img.shields.io/github/license/unbekannt3/room-card-minimalist?style=flat-square&logo=opensourceinitiative&logoColor=white&color=0080ff
+[release-badge]: https://img.shields.io/github/v/release/unbekannt3/dynamic-room-card-minimalist?style=flat-square
+[prerelease-badge]: https://img.shields.io/github/v/release/unbekannt3/dynamic-room-card-minimalist?include_prereleases&style=flat-square&label=prerelease
+[downloads-badge]: https://img.shields.io/github/downloads/unbekannt3/dynamic-room-card-minimalist/total?style=flat-square
+[build-badge]: https://img.shields.io/github/actions/workflow/status/unbekannt3/dynamic-room-card-minimalist/build.yaml?branch=main&style=flat-square
+[license-badge]: https://img.shields.io/github/license/unbekannt3/dynamic-room-card-minimalist?style=flat-square&logo=opensourceinitiative&logoColor=white&color=0080ff
 
 <!-- References -->
 
 [home-assistant]: https://www.home-assistant.io/
 [hacs]: https://hacs.xyz
-[release-url]: https://github.com/unbekannt3/room-card-minimalist/releases
-[license-url]: https://github.com/unbekannt3/room-card-minimalist/blob/main/LICENSE
+[release-url]: https://github.com/unbekannt3/dynamic-room-card-minimalist/releases
+[license-url]: https://github.com/unbekannt3/dynamic-room-card-minimalist/blob/main/LICENSE

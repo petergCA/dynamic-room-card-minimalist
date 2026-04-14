@@ -1,6 +1,6 @@
 {
 	"name": "Room Card Minimalist",
-	"filename": "room-card-minimalist.js",
+	"filename": "dynamic-room-card-minimalist.js",
 	"homeassistant": "2024.1.0",
 	"render_readme": true
 }
