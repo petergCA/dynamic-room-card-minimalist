@@ -45,20 +45,48 @@ Based on [patrickfnielsen/hass-room-card](https://github.com/patrickfnielsen/has
 
 Or search for "dynamic-room-card-minimalist" in [HACS][hacs].
 
-### Manual
+### Manual (from source)
 
-1. Download `dynamic-room-card-minimalist.js` from the [latest release][release-url]
-2. Place it in your `config/www` folder
-3. Add the resource:
+1. Clone the repo and build:
+
+   ```bash
+   git clone https://github.com/petergCA/dynamic-room-card-minimalist.git
+   cd dynamic-room-card-minimalist
+   npm install
+   npm run deploy
+   ```
+
+   `npm run deploy` builds the card and copies the JS into `custom_components/dynamic_room_card_minimalist/`.
+
+2. Copy the entire `custom_components/dynamic_room_card_minimalist/` folder into your HA config:
+
+   ```
+   config/
+     custom_components/
+       dynamic_room_card_minimalist/
+         __init__.py
+         manifest.json
+         dynamic-room-card-minimalist.js
+   ```
+
+3. Enable the integration in `configuration.yaml`:
+
+   ```yaml
+   dynamic_room_card_minimalist:
+   ```
+
+4. Restart Home Assistant.
+
+5. Add the resource:
    - **UI:** _Settings_ → _Dashboards_ → _Resources_ → _Add Resource_
-     - URL: `/local/dynamic-room-card-minimalist.js`
+     - URL: `/dynamic_room_card_minimalist/dynamic-room-card-minimalist.js`
      - Type: `JavaScript Module`
    - **YAML:**
 
      ```yaml
      lovelace:
        resources:
-         - url: /local/dynamic-room-card-minimalist.js
+         - url: /dynamic_room_card_minimalist/dynamic-room-card-minimalist.js
            type: module
      ```
 
@@ -573,7 +601,8 @@ npm install           # Install dependencies
 npm run watch         # Dev server on localhost:8080
 npm run docker:start  # Start local HA on localhost:8123
 npm run docker:stop   # Stop local HA
-npm run build         # Production build
+npm run build         # Production build → dist/
+npm run deploy        # Production build + copy into custom_components/
 ```
 
 Add the dev resource in HA: `http://localhost:8080/dynamic-room-card-minimalist.js` (JavaScript Module)

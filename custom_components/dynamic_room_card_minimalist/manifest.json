@@ -1,0 +1,10 @@
+{
+	"domain": "dynamic_room_card_minimalist",
+	"name": "Dynamic Room Card Minimalist",
+	"version": "1.4.3",
+	"documentation": "",
+	"requirements": [],
+	"dependencies": ["frontend"],
+	"codeowners": [],
+	"iot_class": "local_push"
+}
