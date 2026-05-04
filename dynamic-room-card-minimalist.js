@@ -3173,8 +3173,8 @@
                 Math.ceil(e / n),
                 Number(this._config.entity_rows) || 0
               ),
-              i = Math.max(147, 10 + 49 * r),
-              a = Math.max(3, Math.round(i / 50));
+              i = Math.max(159, 22 + 49 * r),
+              a = Math.max(3, Math.round(i / 56));
             return a
           }
         }, {
@@ -3193,8 +3193,8 @@
                 Math.ceil(e / o),
                 Number(this._config.entity_rows) || 0
               ),
-              r = Math.max(147, 10 + 49 * n),
-              i = Math.max(3, Math.ceil(r / 72));
+              r = Math.max(159, 22 + 49 * n),
+              i = Math.max(3, Math.ceil(r / 56));
             return {
               columns: 12,
               min_columns: 12,
