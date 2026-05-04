@@ -1,7 +1,0 @@
-{
-	"recommendations": [
-		"esbenp.prettier-vscode",
-		"ms-vscode.vscode-json",
-		"vivaxy.vscode-conventional-commits"
-	]
-}
